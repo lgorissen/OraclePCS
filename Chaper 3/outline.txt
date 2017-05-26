@@ -1,4 +1,4 @@
-Chatper 3 is the chapter for:
+Chapter 3 is the chapter for:
 - environment set-up
 - QuickStart App
 - familiarizing with PCS
