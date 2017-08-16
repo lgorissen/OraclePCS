@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+                  xmlns:sch="http://elidodo.com/parts/ws" 
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+                  xmlns:tns="http://elidodo.com/parts/parts-ws" 
+                  targetNamespace="http://elidodo.com/parts/parts-ws">
+
+  <wsdl:types>
+    <xs:schema xmlns:tns="http://elidodo.com/parts/ws" 
+               xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+               elementFormDefault="qualified" 
+               targetNamespace="http://elidodo.com/parts/ws">
+      <xs:element name="orderPartsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="orderAccepted" type="xs:boolean"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+
+  <wsdl:message name="orderPartsResponse">
+    <wsdl:part element="sch:orderPartsResponse" name="orderPartsResponse">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:portType name="OrderPartsCallbackPort">
+    <wsdl:operation name="orderPartsCallback">
+      <wsdl:input message="tns:orderPartsResponse" name="orderPartsResponse">
+    </wsdl:input>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="OrderPartsCallbackPortSoap11" type="tns:OrderPartsCallbackPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="orderPartsCallback">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="orderPartsResponse">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://elidodo.com/parts/ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://elidodo.com/parts/parts-ws" targetNamespace="http://elidodo.com/parts/parts-ws">
+  <wsdl:types>
+    <xs:schema xmlns:tns="http://elidodo.com/parts/ws" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://elidodo.com/parts/ws">
+
+    <xs:element name="getPartRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getPartResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="part" type="tns:part"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getPartsByTypeRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="type" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getPartsByTypeResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="partList" type="tns:partList"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="orderPartsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="partList" type="tns:partList"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="orderPartsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="orderAccepted" type="xs:boolean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="part">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="type" type="xs:string"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="count" type="xs:int"/>
+            <xs:element name="price" type="xs:double"/>
+            <xs:element name="currency" type="tns:currency"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="partList">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="part" type="tns:part"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="currency">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="USD"/>
+            <xs:enumeration value="EUR"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getPartRequest">
+    <wsdl:part element="sch:getPartRequest" name="getPartRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPartResponse">
+    <wsdl:part element="sch:getPartResponse" name="getPartResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPartsByTypeResponse">
+    <wsdl:part element="sch:getPartsByTypeResponse" name="getPartsByTypeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPartsByTypeRequest">
+    <wsdl:part element="sch:getPartsByTypeRequest" name="getPartsByTypeRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="orderPartsRequest">
+    <wsdl:part element="sch:orderPartsRequest" name="orderPartsRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="orderPartsResponse">
+    <wsdl:part element="sch:orderPartsResponse" name="orderPartsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="PartsPort">
+    <wsdl:operation name="getPart">
+      <wsdl:input message="tns:getPartRequest" name="getPartRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getPartResponse" name="getPartResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPartsByType">
+      <wsdl:input message="tns:getPartsByTypeRequest" name="getPartsByTypeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getPartsByTypeResponse" name="getPartsByTypeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="OrderPartsPort">
+    <wsdl:operation name="orderParts">
+      <wsdl:input message="tns:orderPartsRequest" name="orderPartsRequest">
+    </wsdl:input>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="OrderPartsCallbackPort">
+    <wsdl:operation name="orderPartsCallback">
+      <wsdl:input message="tns:orderPartsResponse" name="orderPartsResponse">
+    </wsdl:input>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PartsPortSoap11" type="tns:PartsPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getPart">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getPartRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPartResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPartsByType">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getPartsByTypeRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPartsByTypeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="OrderPartsPortSoap11" type="tns:OrderPartsPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="orderParts">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="orderPartsRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="OrderPartsCallbackPortSoap11" type="tns:OrderPartsCallbackPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="orderPartsCallback">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="orderPartsResponse">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions>

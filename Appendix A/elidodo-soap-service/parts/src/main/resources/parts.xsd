@@ -1,0 +1,76 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:tns="http://elidodo.com/parts/ws"
+           targetNamespace="http://elidodo.com/parts/ws" elementFormDefault="qualified">
+
+    <xs:element name="getPartRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getPartResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="part" type="tns:part"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getPartsByTypeRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="type" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getPartsByTypeResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="partList" type="tns:partList"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="orderPartsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="partList" type="tns:partList"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="orderPartsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="orderAccepted" type="xs:boolean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="part">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="type" type="xs:string"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="count" type="xs:int"/>
+            <xs:element name="price" type="xs:double"/>
+            <xs:element name="currency" type="tns:currency"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="partList">
+        <xs:sequence>
+            <xs:element name="part" type="tns:part" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="currency">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="USD"/>
+            <xs:enumeration value="EUR"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

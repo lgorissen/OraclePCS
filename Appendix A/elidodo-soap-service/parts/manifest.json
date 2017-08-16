@@ -1,0 +1,12 @@
+{
+    "runtime": {
+        "majorVersion": "8"
+    },
+    "command": "java -jar elidodo-soap-service-0.1.0.jar",
+    "release": {
+        "version": "1.0",
+        "build": "22",
+        "commit": "123456"
+    },
+    "notes": "Elidodo SOAP parts services - implemented in Spring Boot"
+}
