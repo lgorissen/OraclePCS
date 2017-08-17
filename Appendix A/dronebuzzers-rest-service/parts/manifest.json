@@ -1,0 +1,12 @@
+{
+    "runtime": {
+        "majorVersion": "8"
+    },
+    "command": "java -jar dronebuzzers-rest-service-1.0.jar",
+    "release": {
+        "version": "1.0",
+        "build": "5",
+        "commit": "123456"
+    },
+    "notes": "DroneBuzzers REST parts services -  Spring Boot Web Service"
+}
