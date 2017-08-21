@@ -51,7 +51,7 @@
                             <clearOutputDir>false</clearOutputDir>
                     	</configuration>
                     </execution>
-                    <execution>
+                    <!--<execution>
 			<id>xjc-wsdl</id>
 			<goals>
 		            <goal>xjc</goal>
@@ -64,7 +64,7 @@
                             <xmlschema>false</xmlschema>
                             <schemaFiles>callbackOrders.wsdl</schemaFiles>
                     	</configuration>
-                    </execution>
+                    </execution>-->
                 </executions>
             </plugin>
             <plugin>

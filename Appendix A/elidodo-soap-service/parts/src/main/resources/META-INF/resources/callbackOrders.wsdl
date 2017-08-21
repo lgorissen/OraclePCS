@@ -25,14 +25,14 @@
     </wsdl:part>
   </wsdl:message>
 
-  <wsdl:portType name="OrderPartsCallbackPort">
+  <wsdl:portType name="PartsCallbackPort">
     <wsdl:operation name="orderPartsCallback">
       <wsdl:input message="tns:orderPartsResponse" name="orderPartsResponse">
     </wsdl:input>
     </wsdl:operation>
   </wsdl:portType>
 
-  <wsdl:binding name="OrderPartsCallbackPortSoap11" type="tns:OrderPartsCallbackPort">
+  <wsdl:binding name="PartsCallbackPortSoap11" type="tns:PartsCallbackPort">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <wsdl:operation name="orderPartsCallback">
       <soap:operation soapAction=""/>
@@ -41,4 +41,11 @@
       </wsdl:input>
     </wsdl:operation>
   </wsdl:binding>
+
+  <wsdl:service name="PartsPortService">
+    <wsdl:port binding="tns:PartsCallbackPortSoap11" name="PartsCallbackPortSoap11">
+      <soap:address location="http://<to-be-set-from-ReplyTo-Header>"/>
+    </wsdl:port>
+  </wsdl:service>
+
 </wsdl:definitions>
