@@ -18,6 +18,19 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="getPartsRequest">
+        <xs:complexType>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getPartsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="partList" type="tns:partList"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="getPartsByTypeRequest">
         <xs:complexType>
             <xs:sequence>
@@ -37,7 +50,8 @@
     <xs:element name="orderPartsRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="partList" type="tns:partList"/>
+                <xs:element name="yourOrderNumber" type="xs:string"/>
+                <xs:element name="orderLineList" type="tns:orderLineList"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -45,7 +59,12 @@
     <xs:element name="orderPartsResponse">
         <xs:complexType>
             <xs:sequence>
+                <xs:element name="eliDodoOrderNumber" type="xs:string"/>
+                <xs:element name="yourOrderNumber" type="xs:string"/>
                 <xs:element name="orderAccepted" type="xs:boolean"/>
+                <xs:element name="orderLineList" type="tns:orderLineList"/>
+                <xs:element name="totalOrderAmount" type="xs:double"/>
+                <xs:element name="currency" type="tns:currency"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -54,8 +73,7 @@
         <xs:sequence>
             <xs:element name="id" type="xs:string"/>
             <xs:element name="type" type="xs:string"/>
-            <xs:element name="name" type="xs:string"/>
-            <xs:element name="count" type="xs:int"/>
+            <xs:element name="description" type="xs:string"/>
             <xs:element name="price" type="xs:double"/>
             <xs:element name="currency" type="tns:currency"/>
         </xs:sequence>
@@ -64,6 +82,19 @@
     <xs:complexType name="partList">
         <xs:sequence>
             <xs:element name="part" type="tns:part" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="orderLineList">
+        <xs:sequence>
+            <xs:element name="orderLine" type="tns:orderLine" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="orderLine">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="itemCount" type="xs:integer"/>
         </xs:sequence>
     </xs:complexType>
 

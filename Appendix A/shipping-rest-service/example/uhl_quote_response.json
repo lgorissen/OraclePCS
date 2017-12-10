@@ -1,0 +1,12 @@
+{
+    "quoteReference": "UHL-0075651559",
+    "clientId": "TDF",
+    "clientReference": "TDF-SHIPMENT-2438",
+    "totalAmount": 12.1,
+    "shipment": {
+        "from": "Amsterdam",
+        "to": "Paris",
+        "weight": 5.5
+    },
+    "validUntil": "26-11-2017"
+}

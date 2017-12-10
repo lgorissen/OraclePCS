@@ -5,7 +5,7 @@
 
     <groupId>org.springframework</groupId>
     <artifactId>elidodo-soap-service</artifactId>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -51,20 +51,6 @@
                             <clearOutputDir>false</clearOutputDir>
                     	</configuration>
                     </execution>
-                    <!--<execution>
-			<id>xjc-wsdl</id>
-			<goals>
-		            <goal>xjc</goal>
-			</goals>
-                        <configuration>
-                            <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
-                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
-                            <clearOutputDir>false</clearOutputDir>
-                            <wsdl>true</wsdl>
-                            <xmlschema>false</xmlschema>
-                            <schemaFiles>callbackOrders.wsdl</schemaFiles>
-                    	</configuration>
-                    </execution>-->
                 </executions>
             </plugin>
             <plugin>

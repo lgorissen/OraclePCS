@@ -1,0 +1,30 @@
+{
+    "dbOrderNumber": "DB-00879516",
+    "clientId": "TDF",
+    "clientReference": "TDF-0067",
+    "totalAmount": 410.1,
+    "orderLineSummary": [
+        {
+            "part": {
+                "id": "DB-FK-A250-V4",
+                "category": "Drone",
+                "type": "Frame",
+                "name": "DroneBuzzer Frame Kit regular V4 (2016 edition)",
+                "unitPrice": 14.65,
+                "currency": "EUR"
+            },
+            "count": 22
+        },
+        {
+            "part": {
+                "id": "DB-38406-2350KV",
+                "category": "Drone",
+                "type": "Motor",
+                "name": "DroneBuzzer regular 2017",
+                "unitPrice": 21.95,
+                "currency": "EUR"
+            },
+            "count": 4
+        }
+    ]
+}

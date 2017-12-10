@@ -18,7 +18,7 @@
             <directory>${project.build.directory}</directory>
             <outputDirectory></outputDirectory>
             <includes>
-                <include>elidodo-soap-service-0.1.0.jar</include>
+                <include>elidodo-soap-service-1.0.0.jar</include>
             </includes>
         </fileSet>
     </fileSets>

@@ -2,33 +2,37 @@ package com.dronebuzzers.rest;
 
 public class Part {
   private final String id;
+  private final String category;
   private final String type;
   private final String name;
-  private final int count;
-  private final double price;
+  private final double unitPrice;
   private final String currency;
   
   public Part(){
       super();
       id = "";
+      category = "";
       type = "";
       name = "";
-      count = 0;
-      price = 0.0;
+      unitPrice = 0.0;
       currency = "";
   }
    
-  public Part(String id, String type, String name, int count, double price, String currency){
+  public Part(String id, String category, String type, String name, double unitPrice, String currency){
       this.id = id;
+      this.category = category;
       this.type = type;
       this.name = name;
-      this.count = count;
-      this.price = price;
+      this.unitPrice = unitPrice;
       this.currency = currency;
   }
   
   public String getId(){
     return this.id;
+  }
+
+  public String getCategory() {
+    return this.category;
   }
 
   public String getType() {
@@ -39,12 +43,8 @@ public class Part {
     return this.name;
   }
   
-  public int getCount(){
-    return this.count;
-  }
-
-  public double getPrice() {
-    return this.price;
+  public double getUnitPrice() {
+    return this.unitPrice;
   }
 
   public String getCurrency() {
@@ -54,10 +54,10 @@ public class Part {
   @Override
   public String toString(){
     return "ID: " + id 
+        + " Category: " + category
         + " Type: " + type
         + " Name: " + name
-        + " Count: " + count
-        + " Price: " + price
+        + " UnitPrice: " + unitPrice
         + " Currency: " + currency;
   }  
   

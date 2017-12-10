@@ -1,0 +1,129 @@
+rts":[
+      {
+         "id":"DB-FK-A250-V4",
+         "category":"Drone",
+         "type":"Frame",
+         "name":"DroneBuzzer Frame Kit regular V4 (2016 edition)",
+         "count":1,
+         "price":14.65,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-FK-A250-V5",
+         "category":"Drone",
+         "type":"Frame",
+         "name":"DroneBuzzer Frame Kit regular V5 (2017 edition)",
+         "count":1,
+         "price":19.55,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-FK-R250-SuperR",
+         "category":"Drone",
+         "type":"Frame",
+         "name":"DroneBuzzer Race Frame Kit version SuperR",
+         "count":1,
+         "price":23.15,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-38404-2300KV",
+         "category":"Drone",
+         "type":"Motor",
+         "name":"DroneBuzzer regular 2016",
+         "count":1,
+         "price":18.95,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-38406-2350KV",
+         "category":"Drone",
+         "type":"Motor",
+         "name":"DroneBuzzer regular 2017",
+         "count":1,
+         "price":21.95,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-38608-250500KV",
+         "category":"Drone",
+         "type":"Motor",
+         "name":"DroneBuzzer racer",
+         "count":1,
+         "price":25.95,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-ESC-622-25A",
+         "category":"Drone",
+         "type":"Speedcontroller",
+         "name":"DroneBuzzer speedcontoller quadcopter - ESC 2-4S 4x25A",
+         "count":1,
+         "price":32.9,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-ESC-629-40A",
+         "category":"Drone",
+         "type":"Speedcontroller",
+         "name":"DroneBuzzer speedcontoller racer - 40A (require 4)",
+         "count":1,
+         "price":9.95,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-FC-9773-R",
+         "category":"Drone",
+         "type":"Flightcontroller",
+         "name":"DroneBuzzer flightcontoller racer - 4ch",
+         "count":1,
+         "price":43.95,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-FC-9773-A",
+         "category":"Drone",
+         "type":"Flightcontroller",
+         "name":"DroneBuzzer flightcontoller regular - 4ch",
+         "count":1,
+         "price":24.15,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-CAM-16:9-fisheye-C960",
+         "category":"Drone",
+         "type":"Camera",
+         "name":"DroneBuzzer camera - 16:9 CMOS ",
+         "count":1,
+         "price":34.99,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-PROP-6x4.5-CW/CCW-FIB-001",
+         "category":"Drone",
+         "type":"Props",
+         "name":"DroneBuzzer regular prop 6 inch - 2 pairs/pack, CW & CCW",
+         "count":1,
+         "price":1.05,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-PROP-6x4-CW/CCW-FIB-002",
+         "category":"Drone",
+         "type":"Props",
+         "name":"DroneBuzzer regular prop 6 inch - 2 pairs/pack, CW & CCW",
+         "count":1,
+         "price":1.15,
+         "currency":"EUR"
+      },
+      {
+         "id":"DB-PROP-6x5-CW/CCW-FIB-RE",
+         "category":"Drone",
+         "type":"Props",
+         "name":"DroneBuzzer racing prop 6 inch - 2 pairs/pack, CW & CCW",
+         "count":1,
+         "price":1.95,
+         "currency":"EUR"
+      }
+   ]
+}

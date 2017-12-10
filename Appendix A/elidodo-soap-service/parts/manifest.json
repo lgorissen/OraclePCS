@@ -2,7 +2,7 @@
     "runtime": {
         "majorVersion": "8"
     },
-    "command": "java -jar elidodo-soap-service-0.1.0.jar",
+    "command": "java -jar elidodo-soap-service-1.0.0.jar",
     "release": {
         "version": "1.0",
         "build": "22",

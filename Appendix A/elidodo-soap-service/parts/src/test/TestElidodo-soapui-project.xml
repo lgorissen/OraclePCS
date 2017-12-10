@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="79c3b418-3580-4502-a873-bda4bace9d9d" activeEnvironment="Default" name="TestElidodo" soapui-version="5.3.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="528d7194-e840-4db0-9f26-bf49504b43d4" wsaVersion="NONE" name="PartsPortSoap11" type="wsdl" bindingName="{http://elidodo.com/parts/parts-ws}PartsPortSoap11" soapVersion="1_1" anonymous="optional" definition="http://localhost:8081/ws/parts/parts.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8081/ws/parts/parts.wsdl"><con:part><con:url>http://localhost:8081/ws/parts/parts.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://elidodo.com/parts/parts-ws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://elidodo.com/parts/ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://elidodo.com/parts/parts-ws">
+<con:soapui-project id="ad8de41f-cb33-439d-8e01-2fff65c39ec7" activeEnvironment="Default" name="LocalWSDL" resourceRoot="" soapui-version="5.3.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="b1bbb264-17d0-4f29-9d21-04ee3b665325" wsaVersion="NONE" name="PartsPortSoap11" type="wsdl" bindingName="{http://elidodo.com/parts/parts/ws}PartsPortSoap11" soapVersion="1_1" anonymous="optional" definition="file:/home/developer/test_async_completed_20171107.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/home/developer/test_async_completed_20171107.wsdl"><con:part><con:url>file:/home/developer/test_async_completed_20171107.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://elidodo.com/parts/parts/ws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://elidodo.com/parts/ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://elidodo.com/parts/parts/ws">
   <wsdl:types>
     <xs:schema elementFormDefault="qualified" targetNamespace="http://elidodo.com/parts/ws" xmlns:tns="http://elidodo.com/parts/ws" xmlns:xs="http://www.w3.org/2001/XMLSchema">
       <xs:element name="getPartRequest">
@@ -13,6 +13,16 @@
         <xs:complexType>
           <xs:sequence>
             <xs:element name="part" type="tns:part"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getPartsRequest">
+        <xs:complexType></xs:complexType>
+      </xs:element>
+      <xs:element name="getPartsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="partList" type="tns:partList"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -33,14 +43,20 @@
       <xs:element name="orderPartsRequest">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="partList" type="tns:partList"/>
+            <xs:element name="yourOrderNumber" type="xs:string"/>
+            <xs:element name="orderLineList" type="tns:orderLineList"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
       <xs:element name="orderPartsResponse">
         <xs:complexType>
           <xs:sequence>
+            <xs:element name="eliDodoOrderNumber" type="xs:string"/>
+            <xs:element name="yourOrderNumber" type="xs:string"/>
             <xs:element name="orderAccepted" type="xs:boolean"/>
+            <xs:element name="orderLineList" type="tns:orderLineList"/>
+            <xs:element name="totalOrderAmount" type="xs:double"/>
+            <xs:element name="currency" type="tns:currency"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -48,15 +64,25 @@
         <xs:sequence>
           <xs:element name="id" type="xs:string"/>
           <xs:element name="type" type="xs:string"/>
-          <xs:element name="name" type="xs:string"/>
-          <xs:element name="count" type="xs:int"/>
+          <xs:element name="description" type="xs:string"/>
           <xs:element name="price" type="xs:double"/>
           <xs:element name="currency" type="tns:currency"/>
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="partList">
         <xs:sequence>
-          <xs:element maxOccurs="unbounded" minOccurs="0" name="part" type="tns:part"/>
+          <xs:element name="part" type="tns:part" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="orderLineList">
+        <xs:sequence>
+          <xs:element name="orderLine" type="tns:orderLine" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="orderLine">
+        <xs:sequence>
+          <xs:element name="id" type="xs:string"/>
+          <xs:element name="itemCount" type="xs:integer"/>
         </xs:sequence>
       </xs:complexType>
       <xs:simpleType name="currency">
@@ -67,11 +93,23 @@
       </xs:simpleType>
     </xs:schema>
   </wsdl:types>
+  <wsdl:message name="orderPartsRequest">
+    <wsdl:part element="sch:orderPartsRequest" name="orderPartsRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="orderPartsResponse">
+    <wsdl:part element="sch:orderPartsResponse" name="orderPartsResponse"></wsdl:part>
+  </wsdl:message>
   <wsdl:message name="getPartRequest">
     <wsdl:part element="sch:getPartRequest" name="getPartRequest"></wsdl:part>
   </wsdl:message>
   <wsdl:message name="getPartResponse">
     <wsdl:part element="sch:getPartResponse" name="getPartResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPartsRequest">
+    <wsdl:part element="sch:getPartsRequest" name="getPartsRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPartsResponse">
+    <wsdl:part element="sch:getPartsResponse" name="getPartsResponse"></wsdl:part>
   </wsdl:message>
   <wsdl:message name="getPartsByTypeResponse">
     <wsdl:part element="sch:getPartsByTypeResponse" name="getPartsByTypeResponse"></wsdl:part>
@@ -79,40 +117,52 @@
   <wsdl:message name="getPartsByTypeRequest">
     <wsdl:part element="sch:getPartsByTypeRequest" name="getPartsByTypeRequest"></wsdl:part>
   </wsdl:message>
-  <wsdl:message name="orderPartsRequest">
-    <wsdl:part element="sch:orderPartsRequest" name="orderPartsRequest"></wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="orderPartsResponse">
-    <wsdl:part element="sch:orderPartsResponse" name="orderPartsResponse"></wsdl:part>
-  </wsdl:message>
   <wsdl:portType name="PartsPort">
+    <wsdl:operation name="orderParts">
+      <wsdl:input message="tns:orderPartsRequest" name="orderPartsRequest"></wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="getPart">
       <wsdl:input message="tns:getPartRequest" name="getPartRequest"></wsdl:input>
       <wsdl:output message="tns:getPartResponse" name="getPartResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getParts">
+      <wsdl:input message="tns:getPartsRequest" name="getPartsRequest"></wsdl:input>
+      <wsdl:output message="tns:getPartsResponse" name="getPartsResponse"></wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getPartsByType">
       <wsdl:input message="tns:getPartsByTypeRequest" name="getPartsByTypeRequest"></wsdl:input>
       <wsdl:output message="tns:getPartsByTypeResponse" name="getPartsByTypeResponse"></wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:portType name="OrderPartsPort">
-    <wsdl:operation name="orderParts">
-      <wsdl:input message="tns:orderPartsRequest" name="orderPartsRequest"></wsdl:input>
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:portType name="OrderPartsCallbackPort">
+  <!--new port type with callback operation-->
+  <wsdl:portType name="PartsCallbackPort">
     <wsdl:operation name="orderPartsCallback">
       <wsdl:input message="tns:orderPartsResponse" name="orderPartsResponse"></wsdl:input>
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="PartsPortSoap11" type="tns:PartsPort">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="orderParts">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="orderPartsRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="getPart">
       <soap:operation soapAction=""/>
       <wsdl:input name="getPartRequest">
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="getPartResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getParts">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getPartsRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPartsResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
@@ -126,16 +176,7 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:binding name="OrderPartsPortSoap11" type="tns:OrderPartsPort">
-    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="orderParts">
-      <soap:operation soapAction=""/>
-      <wsdl:input name="orderPartsRequest">
-        <soap:body use="literal"/>
-      </wsdl:input>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:binding name="OrderPartsCallbackPortSoap11" type="tns:OrderPartsCallbackPort">
+  <wsdl:binding name="PartsCallbackPortSoap11" type="tns:PartsCallbackPort">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <wsdl:operation name="orderPartsCallback">
       <soap:operation soapAction=""/>
@@ -144,18 +185,343 @@
       </wsdl:input>
     </wsdl:operation>
   </wsdl:binding>
-</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints/><con:operation id="dfc91a8f-2ac8-499d-acbd-d17559ecb190" isOneWay="false" action="" name="getPart" bindingOperationName="getPart" type="Request-Response" outputName="getPartResponse" inputName="getPartRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="1285c7bf-ac6f-4423-a06c-b35e38bab279" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8081/ws/parts</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://elidodo.com/parts/ws">
+  <wsdl:service name="PartsPortService">
+    <wsdl:port binding="tns:PartsPortSoap11" name="PartsPortSoap11">
+      <soap:address location="http://127.0.0.1:8082/ws/parts"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://127.0.0.1:8082/ws/parts</con:endpoint><con:endpoint>http://192.168.2.15:8082/ws/parts</con:endpoint></con:endpoints><con:operation id="16480772-493f-4704-83c6-ab1d586196bc" isOneWay="false" action="" name="getPart" bindingOperationName="getPart" type="Request-Response" outputName="getPartResponse" inputName="getPartRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="923e0fa6-99c0-4b40-a23a-430554797695" name="Request 1" useWsAddressing="true"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://192.168.2.15:8082/ws/parts</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://elidodo.com/parts/ws">
    <soapenv:Header/>
    <soapenv:Body>
       <ws:getPartRequest>
-         <ws:id>MK-2709</ws:id>
+         <ws:id>ELI-FRAME-2017_001</ws:id>
       </ws:getPartRequest>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://elidodo.com/parts/parts-ws/PartsPort/getPartRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="3223ee2c-1384-42fc-a232-42d035b7ba35" isOneWay="false" action="" name="getPartsByType" bindingOperationName="getPartsByType" type="Request-Response" outputName="getPartsByTypeResponse" inputName="getPartsByTypeRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="458f7567-e613-4ea0-8c6a-4b2a20cfa7bc" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8081/ws/parts</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://elidodo.com/parts/ws">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://elidodo.com/parts/parts/ws/PartsPort/getPartRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="fe3fac49-6ac5-421e-b7f4-ffac035745bd" isOneWay="false" action="" name="getParts" bindingOperationName="getParts" type="Request-Response" outputName="getPartsResponse" inputName="getPartsRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="f4fb7f8e-0bd5-496e-9f6e-b85e096ca8f5" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://192.168.2.15:8082/ws/parts</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://elidodo.com/parts/ws">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:getPartsRequest/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://elidodo.com/parts/parts/ws/PartsPort/getPartsRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="925e333c-b888-4a35-82dc-cea544f4be8d" isOneWay="false" action="" name="getPartsByType" bindingOperationName="getPartsByType" type="Request-Response" outputName="getPartsByTypeResponse" inputName="getPartsByTypeRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c57be104-e21a-47eb-8b6d-0d96febfa840" name="Request 1" useWsAddressing="true"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://192.168.2.15:8082/ws/parts</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://elidodo.com/parts/ws">
    <soapenv:Header/>
    <soapenv:Body>
       <ws:getPartsByTypeRequest>
-         <ws:type>Motor</ws:type>
+         <ws:type>Speedcontroller</ws:type>
       </ws:getPartsByTypeRequest>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://elidodo.com/parts/parts-ws/PartsPort/getPartsByTypeRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://elidodo.com/parts/parts/ws/PartsPort/getPartsByTypeRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="4e34eedc-eeec-43f1-8673-3c8fecd4ac85" isOneWay="false" action="" name="orderParts" bindingOperationName="orderParts" type="One-Way" inputName="orderPartsRequest" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="9d4c36cc-2156-43b6-bb46-f853a441a442" name="Request 1" useWsAddressing="true"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://192.168.2.15:8082/ws/parts</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://elidodo.com/parts/ws">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:orderPartsRequest>
+         <ws:yourOrderNumber>007-001</ws:yourOrderNumber>
+         <ws:orderLineList>
+            <!--Zero or more repetitions:-->
+            <ws:orderLine>
+               <ws:id>ELI-SPEEDCO-Racer-115-40A</ws:id>
+               <ws:itemCount>3</ws:itemCount>
+            </ws:orderLine>
+            <ws:orderLine>
+               <ws:id>ELI-FRAME-2016_1</ws:id>
+               <ws:itemCount>2</ws:itemCount>
+            </ws:orderLine>
+            <ws:orderLine>
+               <ws:id>ELI-MOTOR-MK-2207K</ws:id>
+               <ws:itemCount>8</ws:itemCount>
+            </ws:orderLine>
+            <ws:orderLine>
+               <ws:id>ELI-FLIGHTC-2017-442-racer</ws:id>
+               <ws:itemCount>1</ws:itemCount>
+            </ws:orderLine>
+            <ws:orderLine>
+               <ws:id>ELI-PROPS-6x4.5-basic</ws:id>
+               <ws:itemCount>2</ws:itemCount>
+            </ws:orderLine>
+         </ws:orderLineList>
+      </ws:orderPartsRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://elidodo.com/parts/parts/ws/PartsPort/orderPartsRequest" generateMessageId="true" replyTo="http://localhost:8088/mockPartsCallbackPortSoap11"/><con:wsrmConfig version="1.2"/></con:call><con:call id="edf43cd9-3e80-422e-9acd-64c999890ad1" name="Request 2" useWsAddressing="true"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://192.168.2.15:8082/ws/parts</con:endpoint><con:request><![CDATA[<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsa="http://www.w3.org/2005/08/addressing">
+   <env:Header>
+      <wsa:To>http://86.83.63.145:8082/ws/parts</wsa:To>
+      <wsa:Action>http://elidodo.com/parts/parts/ws/PartsPort/orderPartsRequest</wsa:Action>
+      <wsa:MessageID>urn:664b70aa-c568-11e7-bbc6-c6b07a25ca85</wsa:MessageID>
+      <wsa:RelatesTo>urn:556a4d97-c568-11e7-bbc6-c6b07a25ca85</wsa:RelatesTo>
+      <wsa:ReplyTo>
+         <wsa:Address>https://qcspcs-stcpaas1.process.us2.oraclecloud.com:443/soa-infra/services/player/DroneFactoryApplication!1.0*soa_ec7f83f4-dfc6-4e1e-9a93-1ef1190671d8/EliDodoSC%23DroneFactoryProcess/Services.Externals.EliDodoSC.reference</wsa:Address>
+         <wsa:ReferenceParameters>
+            <instra:tracking.ecid xmlns:instra="http://xmlns.oracle.com/sca/tracking/1.0">bd0bf8e6-72c9-4669-bdfb-ee57f148b919-002946d4</instra:tracking.ecid>
+            <instra:tracking.conversationId xmlns:instra="http://xmlns.oracle.com/sca/tracking/1.0">urn:556a4d97-c568-11e7-bbc6-c6b07a25ca85</instra:tracking.conversationId>
+            <instra:tracking.FlowEventId xmlns:instra="http://xmlns.oracle.com/sca/tracking/1.0">43145</instra:tracking.FlowEventId>
+            <instra:tracking.FlowId xmlns:instra="http://xmlns.oracle.com/sca/tracking/1.0">40182</instra:tracking.FlowId>
+            <instra:tracking.CorrelationFlowId xmlns:instra="http://xmlns.oracle.com/sca/tracking/1.0">0000LyXYiPo4qm4pvSL6iX1PeZUk0000Bj</instra:tracking.CorrelationFlowId>
+         </wsa:ReferenceParameters>
+      </wsa:ReplyTo>
+      <wsa:FaultTo>
+         <wsa:Address>https://qcspcs-stcpaas1.process.us2.oraclecloud.com:443/soa-infra/services/player/DroneFactoryApplication!1.0*soa_ec7f83f4-dfc6-4e1e-9a93-1ef1190671d8/EliDodoSC%23DroneFactoryProcess/Services.Externals.EliDodoSC.reference</wsa:Address>
+      </wsa:FaultTo>
+   </env:Header>
+   <env:Body>
+      <orderPartsRequest xmlns="http://elidodo.com/parts/ws">
+         <yourOrderNumber>4242</yourOrderNumber>
+         <orderLineList>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-FRAME-2016_1</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</ns0:itemCount>
+            </orderLine>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-MOTOR-MK-2207K</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</ns0:itemCount>
+            </orderLine>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-FLIGHTC-2017-442-basic</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</ns0:itemCount>
+            </orderLine>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-FLIGHTC-2017-442-racer</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</ns0:itemCount>
+            </orderLine>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-FRAME-2017_001</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</ns0:itemCount>
+            </orderLine>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-SPEEDCO-Racer-115-40A</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</ns0:itemCount>
+            </orderLine>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-PROPS-6x4.5-basic</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</ns0:itemCount>
+            </orderLine>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-FRAME-2017_003-Racer</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</ns0:itemCount>
+            </orderLine>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-MOTOR-MK-2709</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</ns0:itemCount>
+            </orderLine>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-PROPS-FIB-6x4.5-race</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</ns0:itemCount>
+            </orderLine>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-SC-2017_4x25</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0</ns0:itemCount>
+            </orderLine>
+            <orderLine>
+               <ns0:id xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">ELI-CAM-2016-16-9-cmos</ns0:id>
+               <ns0:itemCount xmlns:ns="http://xmlns.oracle.com/bpm/forms/schemas/PartsOrderEntryWebForm" xmlns:ns0="http://elidodo.com/parts/ws" xmlns:dummy="http://xmlns.oracle.com/CloudDataTransformationDefinition" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">4</ns0:itemCount>
+            </orderLine>
+         </orderLineList>
+      </orderPartsRequest>
+   </env:Body>
+</env:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://elidodo.com/parts/parts/ws/PartsPort/orderPartsRequest" replyTo="http://localhost:8088/mockPartsCallbackPortSoap11" generateMessageId="true"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="137af86c-d1b2-477e-9cd8-ab2b13b0bbc7" wsaVersion="NONE" name="PartsCallbackPortSoap11" type="wsdl" bindingName="{http://elidodo.com/parts/parts/ws}PartsCallbackPortSoap11" soapVersion="1_1" anonymous="optional" definition="file:/home/developer/test_async_completed_20171107.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/home/developer/test_async_completed_20171107.wsdl"><con:part><con:url>file:/home/developer/test_async_completed_20171107.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://elidodo.com/parts/parts/ws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://elidodo.com/parts/ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://elidodo.com/parts/parts/ws">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://elidodo.com/parts/ws" xmlns:tns="http://elidodo.com/parts/ws" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="getPartRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getPartResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="part" type="tns:part"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getPartsRequest">
+        <xs:complexType></xs:complexType>
+      </xs:element>
+      <xs:element name="getPartsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="partList" type="tns:partList"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getPartsByTypeRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="type" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getPartsByTypeResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="partList" type="tns:partList"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="orderPartsRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="yourOrderNumber" type="xs:string"/>
+            <xs:element name="orderLineList" type="tns:orderLineList"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="orderPartsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="eliDodoOrderNumber" type="xs:string"/>
+            <xs:element name="yourOrderNumber" type="xs:string"/>
+            <xs:element name="orderAccepted" type="xs:boolean"/>
+            <xs:element name="orderLineList" type="tns:orderLineList"/>
+            <xs:element name="totalOrderAmount" type="xs:double"/>
+            <xs:element name="currency" type="tns:currency"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="part">
+        <xs:sequence>
+          <xs:element name="id" type="xs:string"/>
+          <xs:element name="type" type="xs:string"/>
+          <xs:element name="description" type="xs:string"/>
+          <xs:element name="price" type="xs:double"/>
+          <xs:element name="currency" type="tns:currency"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="partList">
+        <xs:sequence>
+          <xs:element name="part" type="tns:part" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="orderLineList">
+        <xs:sequence>
+          <xs:element name="orderLine" type="tns:orderLine" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="orderLine">
+        <xs:sequence>
+          <xs:element name="id" type="xs:string"/>
+          <xs:element name="itemCount" type="xs:integer"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="currency">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="USD"/>
+          <xs:enumeration value="EUR"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="orderPartsRequest">
+    <wsdl:part element="sch:orderPartsRequest" name="orderPartsRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="orderPartsResponse">
+    <wsdl:part element="sch:orderPartsResponse" name="orderPartsResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPartRequest">
+    <wsdl:part element="sch:getPartRequest" name="getPartRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPartResponse">
+    <wsdl:part element="sch:getPartResponse" name="getPartResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPartsRequest">
+    <wsdl:part element="sch:getPartsRequest" name="getPartsRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPartsResponse">
+    <wsdl:part element="sch:getPartsResponse" name="getPartsResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPartsByTypeResponse">
+    <wsdl:part element="sch:getPartsByTypeResponse" name="getPartsByTypeResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPartsByTypeRequest">
+    <wsdl:part element="sch:getPartsByTypeRequest" name="getPartsByTypeRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="PartsPort">
+    <wsdl:operation name="orderParts">
+      <wsdl:input message="tns:orderPartsRequest" name="orderPartsRequest"></wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="getPart">
+      <wsdl:input message="tns:getPartRequest" name="getPartRequest"></wsdl:input>
+      <wsdl:output message="tns:getPartResponse" name="getPartResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getParts">
+      <wsdl:input message="tns:getPartsRequest" name="getPartsRequest"></wsdl:input>
+      <wsdl:output message="tns:getPartsResponse" name="getPartsResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPartsByType">
+      <wsdl:input message="tns:getPartsByTypeRequest" name="getPartsByTypeRequest"></wsdl:input>
+      <wsdl:output message="tns:getPartsByTypeResponse" name="getPartsByTypeResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <!--new port type with callback operation-->
+  <wsdl:portType name="PartsCallbackPort">
+    <wsdl:operation name="orderPartsCallback">
+      <wsdl:input message="tns:orderPartsResponse" name="orderPartsResponse"></wsdl:input>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PartsPortSoap11" type="tns:PartsPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="orderParts">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="orderPartsRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="getPart">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getPartRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPartResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getParts">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getPartsRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPartsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPartsByType">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getPartsByTypeRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPartsByTypeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PartsCallbackPortSoap11" type="tns:PartsCallbackPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="orderPartsCallback">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="orderPartsResponse">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PartsPortService">
+    <wsdl:port binding="tns:PartsPortSoap11" name="PartsPortSoap11">
+      <soap:address location="http://127.0.0.1:8082/ws/parts"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://127.0.0.1:8082/ws/parts</con:endpoint><con:endpoint>http://developer-VirtualBox:8088/mockPartsCallbackPortSoap11</con:endpoint></con:endpoints><con:operation id="2f04cb14-99ae-45f5-ac17-2ab2ca3c63cc" isOneWay="false" action="" name="orderPartsCallback" bindingOperationName="orderPartsCallback" type="One-Way" inputName="orderPartsResponse" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="fb1bc215-cbfc-46b4-b657-c4fe0a0d88ef" name="Request 1" useWsAddressing="true"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://127.0.0.1:8082/ws/parts</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://elidodo.com/parts/ws">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:orderPartsResponse>
+         <ws:eliDodoOrderNumber>?</ws:eliDodoOrderNumber>
+         <ws:yourOrderNumber>?</ws:yourOrderNumber>
+         <ws:orderAccepted>?</ws:orderAccepted>
+         <ws:orderLineList>
+            <!--Zero or more repetitions:-->
+            <ws:orderLine>
+               <ws:id>?</ws:id>
+               <ws:count>?</ws:count>
+            </ws:orderLine>
+         </ws:orderLineList>
+         <ws:totalOrderAmount>?</ws:totalOrderAmount>
+         <ws:currency>?</ws:currency>
+      </ws:orderPartsResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://elidodo.com/parts/parts/ws/PartsCallbackPort/orderPartsResponse"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:mockService id="efc29855-34ef-4e9a-8d3d-ff011a7a2bb1" port="8088" path="/mockPartsCallbackPortSoap11" host="developer-VirtualBox" name="PartsCallbackPortSoap11 MockService" bindToHostOnly="false" docroot=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="orderPartsCallback" id="63432d3e-d6cf-456d-af60-d387cb7ec621" interface="PartsCallbackPortSoap11" operation="orderPartsCallback"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SCRIPT</con:dispatchStyle><con:dispatchPath>mockRequest.getHttpResponse().reset();
+mockRequest.getHttpResponse().getOutputStream().close();</con:dispatchPath><con:response name="Response 1" id="49ed17e5-ceec-49bd-85ae-322b0546a5bc" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent/><con:wsaConfig mustUnderstand="NONE" version="200508"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

@@ -1,0 +1,12 @@
+{
+   "clientAccountId" : "TDF",
+   "clientReferenceId" : "TDF-SHIPMENT-2438",
+   "dpsShipment" :
+      {
+         "origin" : "Amsterdam",
+         "destination" : "Paris",
+         "weight" : 5.5
+      },
+   "dpsQuoteReferenceId" : "DPS-0056267895",
+   "pickupDateRequested" : "17-12-2017"
+}

@@ -3,10 +3,10 @@ package com.elidodo.parts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
-import org.springframework.ws.soap.client.core.SoapActionCallback;
+import org.springframework.ws.soap.client.SoapFaultClientException;
+
+import org.w3._2005._08.addressing.*;
 
 import com.elidodo.parts.ws.OrderPartsResponse;
 
@@ -14,25 +14,26 @@ public class OrderCallbackClient extends WebServiceGatewaySupport {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OrderCallbackClient.class);
 
+
 	public void orderCallback(String callbackAction,
+                                  OrderPartsResponse callbackOrderPartsResponse,
+                                  String callbackToURI,
 				  String callbackMessageID,
 				  String callbackRelatesTo,
-				  String callbackFromAddress,
-				  String callbackToAddress) {
+				  EndpointReferenceType toEndpointReference) {
 
-		OrderPartsResponse callbackRequest = new OrderPartsResponse();
-		callbackRequest.setOrderAccepted(true);
 
-		LOGGER.info("About to execute callback ...  ");
+		LOGGER.info("About to execute callback ... callbackToURI " + callbackToURI);
 
-		try {
-			getWebServiceTemplate().marshalSendAndReceive(callbackToAddress,
-								callbackRequest,
+		try { 
+			getWebServiceTemplate().marshalSendAndReceive(callbackToURI,
+								callbackOrderPartsResponse,
 								new SoapHeaders(callbackAction,
 										callbackMessageID,
 										callbackRelatesTo,
-										callbackFromAddress,
-										callbackToAddress));
+										toEndpointReference));
+		} catch (SoapFaultClientException sfce) {
+			LOGGER.info("Found exception sfce.getFaultCode(): "+ sfce.getFaultCode());
 		} catch (Exception e) {
 			LOGGER.info("Found exception : "+ e);
 		}

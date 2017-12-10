@@ -1,3 +1,2 @@
-# OraclePCS
-
-A repository for PCS Book sample code
+# ProcessCentricApplications
+Code with the Packt book 'Process Centric Applications using Oracle Cloud Services'

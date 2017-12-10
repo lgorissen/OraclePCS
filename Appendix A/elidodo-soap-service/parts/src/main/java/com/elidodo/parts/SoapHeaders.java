@@ -11,11 +11,11 @@ import org.springframework.ws.soap.SoapMessage;
 
 import org.w3._2005._08.addressing.*;
 
-import javax.xml.namespace.QName;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
+import java.net.URLDecoder;
 
-import org.springframework.xml.transform.StringSource;
+import javax.xml.namespace.QName;
+
+import java.util.UUID;
 
 
 public class SoapHeaders implements WebServiceMessageCallback{
@@ -25,48 +25,65 @@ public class SoapHeaders implements WebServiceMessageCallback{
 	private String callbackAction;
 	private String callbackMessageID;
 	private String callbackRelatesTo;
-	private String callbackFromAddress;
-	private String callbackToAddress;
+	//private String callbackFromAddress;
+	private EndpointReferenceType toEndpointReference;
+	//private AttributedURIType toEndpointReference;
 
 	public SoapHeaders(String callbackAction,
 			   String callbackMessageID,
 			   String callbackRelatesTo,
-			   String callbackFromAddress,
-			   String callbackToAddress) {
+			   EndpointReferenceType toEndpointReference) {
+
 		this.callbackAction = callbackAction;
 		this.callbackMessageID = callbackMessageID;
 		this.callbackRelatesTo = callbackRelatesTo;
-		this.callbackFromAddress = callbackFromAddress;
-		this.callbackToAddress = callbackToAddress;
+		this.toEndpointReference = toEndpointReference;
 	}
 	
 	@Override
 	public void doWithMessage(WebServiceMessage message) {
 
+
 		SoapHeader header = ((SoapMessage)message).getSoapHeader();
 
-		SoapHeaderElement actionHeaderElement =  
+		// set Action Soap Header Element
+                SoapHeaderElement actionHeaderElementOut =  
 			header.addHeaderElement(new QName("http://www.w3.org/2005/08/addressing", "Action", "wsa"));
-		actionHeaderElement.setText(callbackAction);
+		actionHeaderElementOut.setText(callbackAction);
+                LOGGER.info(".doWithMessage : set Action to " + callbackAction);
 		
-		SoapHeaderElement messageIDHeaderElement =  
+		// set MessageID Soap Header Element
+                SoapHeaderElement messageIDHeaderElementOut =  
 			header.addHeaderElement(new QName("http://www.w3.org/2005/08/addressing", "MessageID", "wsa"));
-		messageIDHeaderElement.setText(callbackMessageID);
-		
-		SoapHeaderElement relatesToHeaderElement =  
+                String randomMessageID = UUID.randomUUID().toString();
+		messageIDHeaderElementOut.setText(randomMessageID);
+                LOGGER.info(".doWithMessage : set MessageID to " + randomMessageID);
+
+
+		// set RelatesTo Soap Header Element
+                SoapHeaderElement relatesToHeaderElementOut =  
 			header.addHeaderElement(new QName("http://www.w3.org/2005/08/addressing", "RelatesTo", "wsa"));
-		relatesToHeaderElement.setText(callbackRelatesTo);
-		
-		
-		StringSource fromSource = new StringSource("<wsa:From xmlns:wsa=\"http://www.w3.org/2005/08/addressing\"><Address>" + callbackFromAddress + "</Address></wsa:From>");
+                if ( ( callbackRelatesTo != null ) && ( callbackRelatesTo.length() > 0 ) ) {
+		    relatesToHeaderElementOut.setText(callbackRelatesTo);
+                    LOGGER.info(".doWithMessage : set RelatesTo to " + callbackRelatesTo);
+                } else {
+		    relatesToHeaderElementOut.setText(callbackMessageID);
+                    LOGGER.info(".doWithMessage : set RelatesTo to " + callbackMessageID);
+                }
 
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			transformer.transform(fromSource, header.getResult());
+                // set To Soap Header Element
+                try {
+                    String toAddress = toEndpointReference.getAddress().getValue();
+                    toAddress = URLDecoder.decode(toAddress, "UTF-8");
 
-		} catch (Exception e) {
-			LOGGER.info("Exception during transformation : "+ e);
-		}
+                    SoapHeaderElement toHeaderElementOut =  
+		        header.addHeaderElement(new QName("http://www.w3.org/2005/08/addressing", "To", "wsa"));
+        	    toHeaderElementOut.setText(toAddress);
+                    LOGGER.info(".doWithMessage : set To to address : " + toAddress );
+                } catch (Exception e) {
+                     LOGGER.info(".doWithMessage: Exception when setting To Soap Header Element : " + e);
+                }
+
 	}
 	
 }

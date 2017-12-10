@@ -11,28 +11,17 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+
 import org.springframework.ws.soap.server.endpoint.annotation.SoapHeader;
 import org.springframework.ws.soap.SoapHeaderElement;
 
-import com.elidodo.parts.ws.PartList;
-import com.elidodo.parts.ws.GetPartRequest;
-import com.elidodo.parts.ws.GetPartResponse;
-import com.elidodo.parts.ws.GetPartsByTypeRequest;
-import com.elidodo.parts.ws.GetPartsByTypeResponse;
-import com.elidodo.parts.ws.OrderPartsRequest;
-import com.elidodo.parts.ws.OrderPartsResponse;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.JAXBElement;
+import com.elidodo.parts.ws.*;
 
 import org.w3._2005._08.addressing.*;
 
 import java.lang.InterruptedException;
 
-import java.util.UUID;
-
+import java.util.Random;
 
 
 @Endpoint
@@ -66,16 +55,26 @@ public class PartEndpoint {
 		return response;
 	}
 
+	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getPartsRequest")
+	@ResponsePayload
+	public GetPartsResponse getParts(@RequestPayload GetPartsRequest request) {
+
+		LOGGER.info("getParts received request " + request.toString());
+
+		GetPartsResponse response = new GetPartsResponse();
+		response.setPartList(partRepository.getParts());
+
+		return response;
+	}
 
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getPartsByTypeRequest")
 	@ResponsePayload
 	public GetPartsByTypeResponse getPartsByType(@RequestPayload GetPartsByTypeRequest request) {
 
-		LOGGER.info("getPartsByType received request: ", request.toString());
+		LOGGER.info("getPartsByType received request: "+ request.toString());
 
 		GetPartsByTypeResponse response = new GetPartsByTypeResponse();
-                PartList partList = new PartList();
-                partList.getPart().add(partRepository.findPart(request.getType()));
+                PartList partList = partRepository.findPartsByType(request.getType());
 		response.setPartList(partList);
 
 		return response;
@@ -87,17 +86,18 @@ public class PartEndpoint {
 	public void orderParts(@RequestPayload OrderPartsRequest request,
                                @SoapHeader("{" + WS_ADDRESSING_NS  + "}Action") SoapHeaderElement actionHeaderElement,
                                @SoapHeader("{" + WS_ADDRESSING_NS  + "}MessageID") SoapHeaderElement messageIDHeaderElement,
+                               @SoapHeader("{" + WS_ADDRESSING_NS  + "}RelatesTo") SoapHeaderElement relatesToHeaderElement,
                                @SoapHeader("{" + WS_ADDRESSING_NS  + "}ReplyTo") SoapHeaderElement replyToHeaderElement,
                                @SoapHeader("{" + WS_ADDRESSING_NS  + "}From") SoapHeaderElement fromHeaderElement,
                                @SoapHeader("{" + WS_ADDRESSING_NS  + "}To") SoapHeaderElement toHeaderElement) {
 
-		LOGGER.info("orderParts received request: ", request.toString());
+		LOGGER.info("orderParts received request: "+ request.toString());
 
-		String soapAction = getTextFromElement(actionHeaderElement);
-		String soapMessageID = getTextFromElement(messageIDHeaderElement);
-		String soapTo = getTextFromElement(toHeaderElement);
-		String soapFromAddress = getAddressFromElement(fromHeaderElement);
-		String soapReplyToAddress = getAddressFromElement(replyToHeaderElement);
+		String callbackMessageID = SoapHeaderUtils.getText(messageIDHeaderElement);
+		LOGGER.info("orderParts received MessageID: "+ callbackMessageID);
+		String callbackRelatesTo = SoapHeaderUtils.getText(relatesToHeaderElement);
+		LOGGER.info("orderParts received RelatesTo: "+ callbackRelatesTo);
+		EndpointReferenceType callbackToEndpointReference = SoapHeaderUtils.getEndpoint(replyToHeaderElement);
 
 		try {
 			Thread.sleep(8000L);
@@ -107,30 +107,43 @@ public class PartEndpoint {
 
 		LOGGER.info("Done sleeping: about to do callback");
 
-		String callbackAction = "http://elidodo.com/parts/parts-ws/OrderPartsCallbackPort/orderPartsResponse";
-		String callbackMessageID = UUID.randomUUID().toString();
-                String callbackRelatesTo = soapMessageID;
-		String callbackFromAddress =  soapTo;
-		String callbackToAddress = "http://www.w3.org/2005/08/addressing/anonymous";
+		String callbackAction = "http://elidodo.com/parts/parts/ws/OrderPartsCallbackPort/orderPartsResponse";
+		String callbackToURI = "http://www.w3.org/2005/08/addressing/anonymous";
+
+                // determine what callback endpoint is (callbackToURI)
+
+                String soapReplyToAddress = SoapHeaderUtils.getAddress(replyToHeaderElement);
+                String soapFromAddress = SoapHeaderUtils.getAddress(fromHeaderElement);
+
                 if ( (soapReplyToAddress != null) && (soapReplyToAddress.length() > 0) ) {
-			callbackToAddress = soapReplyToAddress;
+			callbackToURI = soapReplyToAddress;
 		} else if ( (soapFromAddress != null) && (soapFromAddress.length() > 0) ) {
-			callbackToAddress = soapFromAddress;
+			callbackToURI = soapFromAddress;
 		}
                 
+                LOGGER.info("callback endpoint is now set to : " + callbackToURI);
+
+                // compose the response
+                OrderPartsResponse callbackOrderPartsResponse = new OrderPartsResponse();
+
+                callbackOrderPartsResponse.setYourOrderNumber(request.getYourOrderNumber());
+                callbackOrderPartsResponse.setEliDodoOrderNumber("ELI-0000" + new Random().nextInt(1000000));
+                callbackOrderPartsResponse.setOrderAccepted(true);
+                //LOGGER.info("DEBUG orderlinelist size "+ request.getOrderLineList().getOrderLine().size());
+                callbackOrderPartsResponse.setOrderLineList(request.getOrderLineList());
+                callbackOrderPartsResponse.setTotalOrderAmount(partRepository.getOrderAmount(request.getOrderLineList()));
+                callbackOrderPartsResponse.setCurrency(Currency.fromValue("EUR"));
 
 
+                // send the callback
                 orderCallbackClient.orderCallback(callbackAction,
+                                                  callbackOrderPartsResponse,
+                                                  callbackToURI,
 						  callbackMessageID,
 						  callbackRelatesTo,
-						  callbackFromAddress,
-						  callbackToAddress);
+						  callbackToEndpointReference);
 
-		LOGGER.info("orderParts header Action: " +  soapAction);
-		LOGGER.info("orderParts header MessageID: " +  soapMessageID);
-		LOGGER.info("orderParts header To: " +  soapTo);
-		LOGGER.info("orderParts header From Address: " +  soapFromAddress);
-		LOGGER.info("orderParts header ReplyTo Address: " +  soapReplyToAddress);
+		LOGGER.info("orderCallbackClient return from callBack - done!");
 
 		return;
 
@@ -140,44 +153,10 @@ public class PartEndpoint {
 	@ResponsePayload
 	public void orderPartsCallback(@RequestPayload OrderPartsResponse request) {
 		
-		LOGGER.info("orderPartsCallback received request: ", request.toString());
+		LOGGER.info("orderPartsCallback received request (should not be here!): "+ request.toString());
 
 		return;
 	}
-
-        private String getTextFromElement(SoapHeaderElement headerElement){
-
-                String response = "";
-
-                if (headerElement != null ) {
-                        response = headerElement.getText();
-                }
-
-                return response;
-        }
-
-        private String getAddressFromElement(SoapHeaderElement headerElement){
-
-                String response = "";
-
-                if ( headerElement != null) {
-                        try {
-
-                                JAXBContext context = JAXBContext.newInstance(org.w3._2005._08.addressing.ObjectFactory.class);
-                                Unmarshaller unmarshaller = context.createUnmarshaller();
-                                JAXBElement jaxbHeaderElement =  (JAXBElement)unmarshaller.unmarshal(headerElement.getSource());
-                                EndpointReferenceType endpoint = (EndpointReferenceType)jaxbHeaderElement.getValue();
-                                AttributedURIType endpointAddress = endpoint.getAddress();
-
-                                response =  endpointAddress.getValue();
-
-                        } catch (JAXBException e) {
-                                e.printStackTrace();
-                        }
-                }
-
-                return response;
-        }
 
 
 }

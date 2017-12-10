@@ -1,0 +1,10 @@
+{
+   "clientId" : "TDF",
+   "clientReference" : "TDF-SHIPMENT-2438",
+   "shipment":
+      {
+         "from" : "Amsterdam",
+         "to" : "Paris",
+         "weight" : 5.5
+      }
+}

@@ -27,14 +27,40 @@ public class PartListDAO implements PartDAO{
     
 
     @Override
-    public List<Part> getByType(String name){
+    public List<Part> getPartsByType(String type){
         
        List<Part> matchList = 
             pList.stream()
-                .filter((e) -> (e.getType().contains(name)))
+                .filter((e) -> (e.getType().contains(type)))
                 .collect(Collectors.toList());
          
         return matchList;
+    }
+
+    
+    @Override
+    public List<Part> getPartsByCategory(String category){
+        
+       List<Part> matchList = 
+            pList.stream()
+                .filter((e) -> (e.getCategory().contains(category)))
+                .collect(Collectors.toList());
+         
+        return matchList;
+    }
+
+    @Override
+    public double getAmount(String id, int count) {
+        Part match = null;
+                
+        match = pList.stream()
+                    .filter(e -> e.getId().contains(id))
+                    .findFirst().orElse(match);
+
+        double amount = match.getUnitPrice() * count;
+
+        return amount;
+
     }
     
     
